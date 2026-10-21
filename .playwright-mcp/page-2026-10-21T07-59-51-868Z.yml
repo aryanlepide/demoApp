@@ -1,0 +1,109 @@
+- generic [active] [ref=f14e1]:
+  - complementary "Main navigation" [ref=f14e2]:
+    - link "MiniDSP dashboard" [ref=f14e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=f14e4]: ///
+    - navigation [ref=f14e5]:
+      - link "Dashboard" [ref=f14e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=f14e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=f14e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=f14e21]:
+      - button "Reset demo data" [ref=f14e22] [cursor=pointer]:
+        - generic [ref=f14e25]: Reset demo
+      - generic [ref=f14e26]: LOCAL TRAINING
+  - generic [ref=f14e27]:
+    - banner [ref=f14e28]:
+      - link "MiniDSP" [ref=f14e29] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=f14e30]:
+        - generic [ref=f14e31]: Synthetic workspace
+        - generic [aria-hidden] [ref=f14e32]: QA
+    - main [ref=f14e33]:
+      - navigation "Breadcrumb" [ref=f14e34]:
+        - list [ref=f14e35]:
+          - listitem [ref=f14e36]:
+            - generic [ref=f14e37]: Lepide MiniDSP
+          - listitem [ref=f14e38]:
+            - generic [aria-hidden] [ref=f14e39]: /
+            - generic [ref=f14e40]: Findings
+      - generic [ref=f14e41]:
+        - paragraph [ref=f14e42]: CLASSIFICATION RESULTS
+        - heading "Findings" [level=1] [ref=f14e43]
+        - paragraph [ref=f14e44]: Review grouped detections across this local demo session. Values are masked; original file contents are not retained.
+      - region [ref=f14e45]:
+        - generic [ref=f14e46]:
+          - generic [ref=f14e47]:
+            - heading "Masked findings" [level=2] [ref=f14e48]
+            - paragraph [ref=f14e49]: 5 finding types
+          - generic [ref=f14e50]:
+            - generic [ref=f14e51]:
+              - generic [ref=f14e52]: Pattern
+              - combobox "Pattern" [ref=f14e53]:
+                - option "All patterns" [selected]
+                - option "Email"
+                - option "UK phone"
+                - option "UK NINO"
+                - option "Payment card"
+            - generic [ref=f14e54]:
+              - generic [ref=f14e55]: Risk
+              - combobox "Risk" [ref=f14e56]:
+                - option "All risks" [selected]
+                - option "Critical"
+                - option "High"
+                - option "Medium"
+                - option "Low"
+            - button "Export CSV" [ref=f14e57] [cursor=pointer]
+        - table [ref=f14e59]:
+          - caption [ref=f14e60]: Masked sensitive data findings by file
+          - rowgroup [ref=f14e61]:
+            - row [ref=f14e62]:
+              - columnheader "Pattern" [ref=f14e63]
+              - columnheader "Risk" [ref=f14e66]
+              - columnheader "File" [ref=f14e69]
+              - columnheader "Occurrences" [ref=f14e72]
+              - columnheader "Masked example" [ref=f14e75]
+              - columnheader "Scanned" [ref=f14e78]
+          - rowgroup [ref=f14e81]:
+            - row [ref=f14e82]:
+              - cell "Payment card" [ref=f14e83]
+              - cell "Critical" [ref=f14e86]
+              - cell "sample-mixed.txt" [ref=f14e88]
+              - cell "1" [ref=f14e91]
+              - cell "**** **** **** 1111" [ref=f14e92]
+              - cell "21 Oct 2026, 13:29" [ref=f14e93]
+            - row [ref=f14e96]:
+              - cell "UK NINO" [ref=f14e97]
+              - cell "High" [ref=f14e100]
+              - cell "sample-mixed.txt" [ref=f14e102]
+              - cell "1" [ref=f14e105]
+              - cell "** ** ** ** *" [ref=f14e106]
+              - cell "21 Oct 2026, 13:29" [ref=f14e107]
+            - row [ref=f14e110]:
+              - cell "UK phone" [ref=f14e111]
+              - cell "Medium" [ref=f14e114]
+              - cell "sample-mixed.txt" [ref=f14e116]
+              - cell "1" [ref=f14e119]
+              - cell "***-0123" [ref=f14e120]
+              - cell "21 Oct 2026, 13:29" [ref=f14e121]
+            - row [ref=f14e124]:
+              - cell "Email address" [ref=f14e125]
+              - cell "Low" [ref=f14e128]
+              - cell "sample-mixed.txt" [ref=f14e130]
+              - cell "1" [ref=f14e133]
+              - cell "***@***" [ref=f14e134]
+              - cell "21 Oct 2026, 13:29" [ref=f14e135]
+            - row [ref=f14e138]:
+              - cell "Email address" [ref=f14e139]
+              - cell "Low" [ref=f14e142]
+              - cell "04_many_emails.csv" [ref=f14e144]
+              - cell "2" [ref=f14e147]
+              - cell "***@***" [ref=f14e148]
+              - cell "21 Oct 2026, 13:28" [ref=f14e149]
+        - paragraph [ref=f14e152]: Risk labels are textual and do not rely on color alone.
+    - contentinfo [ref=f14e153]:
+      - generic [ref=f14e154]: Training prototype
+      - generic [ref=f14e155]: Scan history is held in memory and resets when the server stops.
+  - status

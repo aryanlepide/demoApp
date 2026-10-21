@@ -1,0 +1,111 @@
+- generic [active] [ref=e1]:
+  - complementary "Main navigation" [ref=e2]:
+    - link "MiniDSP dashboard" [ref=e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=e4]: ///
+    - navigation [ref=e5]:
+      - link "Dashboard" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=e21]:
+      - button "Reset demo data" [ref=e22] [cursor=pointer]:
+        - generic [ref=e25]: Reset demo
+      - button "Sign out" [ref=e26] [cursor=pointer]
+      - generic [ref=e30]: LOCAL TRAINING
+  - generic [ref=e31]:
+    - banner [ref=e32]:
+      - link "MiniDSP" [ref=e33] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=e34]:
+        - generic [ref=e35]: QA Demo User
+        - generic [aria-hidden] [ref=e36]: QD
+    - main [ref=e37]:
+      - navigation "Breadcrumb" [ref=e38]:
+        - list [ref=e39]:
+          - listitem [ref=e40]:
+            - generic [ref=e41]: Lepide MiniDSP
+          - listitem [ref=e42]:
+            - generic [aria-hidden] [ref=e43]: /
+            - generic [ref=e44]: Dashboard
+      - generic [ref=e45]:
+        - paragraph [ref=e46]: OVERVIEW
+        - heading "Dashboard" [level=1] [ref=e47]
+        - paragraph [ref=e48]: Your scanned files and masked findings. Synthetic training data only.
+      - generic [ref=e49]:
+        - article [ref=e50]:
+          - heading "Files scanned" [level=2] [ref=e51]
+          - paragraph [ref=e52]: "0"
+        - article [ref=e53]:
+          - heading "Total findings" [level=2] [ref=e54]
+          - paragraph [ref=e55]: "0"
+        - article [ref=e56]:
+          - heading "High-risk files" [level=2] [ref=e57]
+          - paragraph [ref=e58]: "0"
+        - article [ref=e59]:
+          - heading "Critical-risk files" [level=2] [ref=e60]
+          - paragraph [ref=e61]: "0"
+      - generic [ref=e62]:
+        - region [ref=e63]:
+          - heading "Risk distribution" [level=2] [ref=e65]
+          - table [ref=e67]:
+            - caption [ref=e68]: Highest risk per file and finding occurrence distribution by risk
+            - rowgroup [ref=e69]:
+              - row [ref=e70]:
+                - columnheader "Risk level" [ref=e71]
+                - columnheader "Files" [ref=e74]
+                - columnheader "Occurrences" [ref=e77]
+                - columnheader "Share of occurrences" [ref=e80]
+            - rowgroup [ref=e83]:
+              - row [ref=e84]:
+                - cell "Critical" [ref=e85]
+                - cell "0" [ref=e87]
+                - cell "0" [ref=e88]
+                - cell [ref=e89]:
+                  - generic "0% of finding occurrences" [ref=e90]: 0%
+              - row [ref=e95]:
+                - cell "High" [ref=e96]
+                - cell "0" [ref=e98]
+                - cell "0" [ref=e99]
+                - cell [ref=e100]:
+                  - generic "0% of finding occurrences" [ref=e101]: 0%
+              - row [ref=e106]:
+                - cell "Medium" [ref=e107]
+                - cell "0" [ref=e109]
+                - cell "0" [ref=e110]
+                - cell [ref=e111]:
+                  - generic "0% of finding occurrences" [ref=e112]: 0%
+              - row [ref=e117]:
+                - cell "Low" [ref=e118]
+                - cell "0" [ref=e120]
+                - cell "0" [ref=e121]
+                - cell [ref=e122]:
+                  - generic "0% of finding occurrences" [ref=e123]: 0%
+              - row [ref=e128]:
+                - cell "None" [ref=e129]
+                - cell "0" [ref=e131]
+                - cell "0" [ref=e132]
+                - cell [ref=e133]:
+                  - generic "0% of finding occurrences" [ref=e134]: 0%
+        - region [ref=e139]:
+          - generic [ref=e140]:
+            - heading "Recent scans" [level=2] [ref=e141]
+            - link "View findings" [ref=e142] [cursor=pointer]:
+              - /url: /findings
+          - table [ref=e144]:
+            - caption [ref=e145]: Recent synthetic file scans
+            - rowgroup [ref=e146]:
+              - row [ref=e147]:
+                - columnheader "File" [ref=e148]
+                - columnheader "Scanned" [ref=e151]
+                - columnheader "Risk" [ref=e154]
+                - columnheader "Findings" [ref=e157]
+            - rowgroup [ref=e160]:
+              - row [ref=e161]:
+                - cell "No scans yet. Upload a synthetic file to get started." [ref=e162]
+    - contentinfo [ref=e163]:
+      - generic [ref=e164]: Training prototype
+      - generic [ref=e165]: Scan history is held in memory and resets when the server stops.
+  - status

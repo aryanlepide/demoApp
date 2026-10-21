@@ -1,0 +1,111 @@
+- generic [active] [ref=f3e1]:
+  - complementary "Main navigation" [ref=f3e2]:
+    - link "MiniDSP dashboard" [ref=f3e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=f3e4]: ///
+    - navigation [ref=f3e5]:
+      - link "Dashboard" [ref=f3e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=f3e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=f3e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=f3e21]:
+      - button "Reset demo data" [ref=f3e22] [cursor=pointer]:
+        - generic [ref=f3e25]: Reset demo
+      - button "Sign out" [ref=f3e26] [cursor=pointer]
+      - generic [ref=f3e30]: LOCAL TRAINING
+  - generic [ref=f3e31]:
+    - banner [ref=f3e32]:
+      - link "MiniDSP" [ref=f3e33] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=f3e34]:
+        - generic [ref=f3e35]: Browser QA User
+        - generic [aria-hidden] [ref=f3e36]: BQ
+    - main [ref=f3e37]:
+      - navigation "Breadcrumb" [ref=f3e38]:
+        - list [ref=f3e39]:
+          - listitem [ref=f3e40]:
+            - generic [ref=f3e41]: Lepide MiniDSP
+          - listitem [ref=f3e42]:
+            - generic [aria-hidden] [ref=f3e43]: /
+            - generic [ref=f3e44]: Dashboard
+      - generic [ref=f3e45]:
+        - paragraph [ref=f3e46]: OVERVIEW
+        - heading "Dashboard" [level=1] [ref=f3e47]
+        - paragraph [ref=f3e48]: Your scanned files and masked findings. Synthetic training data only.
+      - generic [ref=f3e49]:
+        - article [ref=f3e50]:
+          - heading "Files scanned" [level=2] [ref=f3e51]
+          - paragraph [ref=f3e52]: "0"
+        - article [ref=f3e53]:
+          - heading "Total findings" [level=2] [ref=f3e54]
+          - paragraph [ref=f3e55]: "0"
+        - article [ref=f3e56]:
+          - heading "High-risk files" [level=2] [ref=f3e57]
+          - paragraph [ref=f3e58]: "0"
+        - article [ref=f3e59]:
+          - heading "Critical-risk files" [level=2] [ref=f3e60]
+          - paragraph [ref=f3e61]: "0"
+      - generic [ref=f3e62]:
+        - region [ref=f3e63]:
+          - heading "Risk distribution" [level=2] [ref=f3e65]
+          - table [ref=f3e67]:
+            - caption [ref=f3e68]: Highest risk per file and finding occurrence distribution by risk
+            - rowgroup [ref=f3e69]:
+              - row [ref=f3e70]:
+                - columnheader "Risk level" [ref=f3e71]
+                - columnheader "Files" [ref=f3e74]
+                - columnheader "Occurrences" [ref=f3e77]
+                - columnheader "Share of occurrences" [ref=f3e80]
+            - rowgroup [ref=f3e83]:
+              - row [ref=f3e84]:
+                - cell "Critical" [ref=f3e85]
+                - cell "0" [ref=f3e87]
+                - cell "0" [ref=f3e88]
+                - cell [ref=f3e89]:
+                  - generic "0% of finding occurrences" [ref=f3e90]: 0%
+              - row [ref=f3e95]:
+                - cell "High" [ref=f3e96]
+                - cell "0" [ref=f3e98]
+                - cell "0" [ref=f3e99]
+                - cell [ref=f3e100]:
+                  - generic "0% of finding occurrences" [ref=f3e101]: 0%
+              - row [ref=f3e106]:
+                - cell "Medium" [ref=f3e107]
+                - cell "0" [ref=f3e109]
+                - cell "0" [ref=f3e110]
+                - cell [ref=f3e111]:
+                  - generic "0% of finding occurrences" [ref=f3e112]: 0%
+              - row [ref=f3e117]:
+                - cell "Low" [ref=f3e118]
+                - cell "0" [ref=f3e120]
+                - cell "0" [ref=f3e121]
+                - cell [ref=f3e122]:
+                  - generic "0% of finding occurrences" [ref=f3e123]: 0%
+              - row [ref=f3e128]:
+                - cell "None" [ref=f3e129]
+                - cell "0" [ref=f3e131]
+                - cell "0" [ref=f3e132]
+                - cell [ref=f3e133]:
+                  - generic "0% of finding occurrences" [ref=f3e134]: 0%
+        - region [ref=f3e139]:
+          - generic [ref=f3e140]:
+            - heading "Recent scans" [level=2] [ref=f3e141]
+            - link "View findings" [ref=f3e142] [cursor=pointer]:
+              - /url: /findings
+          - table [ref=f3e144]:
+            - caption [ref=f3e145]: Recent synthetic file scans
+            - rowgroup [ref=f3e146]:
+              - row [ref=f3e147]:
+                - columnheader "File" [ref=f3e148]
+                - columnheader "Scanned" [ref=f3e151]
+                - columnheader "Risk" [ref=f3e154]
+                - columnheader "Findings" [ref=f3e157]
+            - rowgroup [ref=f3e160]:
+              - row [ref=f3e161]:
+                - cell "No scans yet. Upload a synthetic file to get started." [ref=f3e162]
+    - contentinfo [ref=f3e163]:
+      - generic [ref=f3e164]: Training prototype
+      - generic [ref=f3e165]: Scan history is held in memory and resets when the server stops.
+  - status

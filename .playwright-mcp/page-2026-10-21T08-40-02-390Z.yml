@@ -1,0 +1,40 @@
+- generic [active] [ref=e1]:
+  - complementary "Main navigation" [ref=e2]:
+    - link "MiniDSP dashboard" [ref=e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=e4]: ///
+    - navigation [ref=e5]:
+      - link "Dashboard" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=e21]:
+      - button "Reset demo data" [ref=e22] [cursor=pointer]:
+        - generic [ref=e25]: Reset demo
+      - generic [ref=e26]: LOCAL TRAINING
+  - generic [ref=e27]:
+    - banner [ref=e28]:
+      - link "MiniDSP" [ref=e29] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=e30]:
+        - generic [ref=e31]: Synthetic workspace
+        - generic [aria-hidden] [ref=e32]: QA
+    - main [ref=e33]:
+      - navigation "Breadcrumb" [ref=e34]:
+        - list [ref=e35]:
+          - listitem [ref=e36]:
+            - generic [ref=e37]: Lepide MiniDSP
+          - listitem [ref=e38]:
+            - generic [aria-hidden] [ref=e39]: /
+            - generic [ref=e40]: Dashboard
+      - generic [ref=e41]:
+        - paragraph [ref=e42]: OVERVIEW
+        - heading "Dashboard" [level=1] [ref=e43]
+        - paragraph [ref=e44]: Your scanned files and masked findings. Synthetic training data only.
+      - status [ref=e45]: Loading dashboard…
+    - contentinfo [ref=e46]:
+      - generic [ref=e47]: Training prototype
+      - generic [ref=e48]: Scan history is held in memory and resets when the server stops.
+  - status

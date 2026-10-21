@@ -1,0 +1,51 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - link "MiniDSP home" [ref=f4e3] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f4e4]: M
+      - generic [ref=f4e5]: MiniDSP
+    - generic [ref=f4e6]:
+      - generic [ref=f4e7]: TRAINING PROTOTYPE
+      - generic [ref=f4e9]: Local workspace
+      - generic [aria-hidden] [ref=f4e10]: QA
+  - main [ref=f4e11]:
+    - navigation "Breadcrumb" [ref=f4e12]:
+      - list [ref=f4e13]:
+        - listitem [ref=f4e14]:
+          - generic [ref=f4e15]: Data discovery
+        - listitem [ref=f4e16]:
+          - generic [aria-hidden] [ref=f4e17]: /
+          - generic [ref=f4e18]: Sensitive data scan
+    - region [ref=f4e19]:
+      - generic [ref=f4e20]:
+        - paragraph [ref=f4e21]: CLASSIFICATION WORKSPACE
+        - heading "Sensitive data scan" [level=1] [ref=f4e22]
+        - paragraph [ref=f4e23]: Run a synthetic sample to review detection, risk, and safe masking.
+      - note [ref=f4e24]:
+        - generic [ref=f4e29]:
+          - strong [ref=f4e30]: Synthetic data only
+          - generic [ref=f4e31]: Samples are processed in memory, never saved.
+    - generic [ref=f4e32]:
+      - complementary [ref=f4e33]:
+        - generic [ref=f4e34]:
+          - generic [ref=f4e35]:
+            - paragraph [ref=f4e36]: SCAN SETUP
+            - heading "Choose a sample" [level=2] [ref=f4e37]
+          - generic [ref=f4e38]: 3 samples
+        - radiogroup "Choose a sample" [ref=f4e39]:
+          - generic [ref=f4e40]: Synthetic sample
+          - paragraph [ref=f4e42]: Loading samples…
+        - paragraph [ref=f4e43]: Only preloaded training fixtures are available in this prototype.
+        - button "Run sample scan" [disabled] [ref=f4e44]
+      - region [ref=f4e48]:
+        - generic [ref=f4e49]:
+          - generic [ref=f4e50]:
+            - paragraph [ref=f4e51]: SCAN RESULTS
+            - heading "Ready to scan" [level=2] [ref=f4e52]
+          - generic [ref=f4e53]: Not scanned
+        - generic [ref=f4e54]:
+          - heading "No scan results yet" [level=3] [ref=f4e59]
+          - paragraph [ref=f4e60]: Select a synthetic sample, then run a scan to see masked findings here.
+    - generic [ref=f4e61]:
+      - generic [ref=f4e62]: MiniDSP training prototype
+      - generic [ref=f4e63]: Local synthetic scan

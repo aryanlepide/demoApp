@@ -1,0 +1,67 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "MiniDSP home" [ref=e3] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=e4]: M
+      - generic [ref=e5]: MiniDSP
+    - generic [ref=e6]:
+      - generic [ref=e7]: TRAINING PROTOTYPE
+      - generic [ref=e9]: Local workspace
+      - generic [aria-hidden] [ref=e10]: QA
+  - main [ref=e11]:
+    - navigation "Breadcrumb" [ref=e12]:
+      - list [ref=e13]:
+        - listitem [ref=e14]:
+          - generic [ref=e15]: Data discovery
+        - listitem [ref=e16]:
+          - generic [aria-hidden] [ref=e17]: /
+          - generic [ref=e18]: Sensitive data scan
+    - region [ref=e19]:
+      - generic [ref=e20]:
+        - paragraph [ref=e21]: CLASSIFICATION WORKSPACE
+        - heading "Sensitive data scan" [level=1] [ref=e22]
+        - paragraph [ref=e23]: Run a synthetic sample to review detection, risk, and safe masking.
+      - note [ref=e24]:
+        - generic [ref=e29]:
+          - strong [ref=e30]: Synthetic data only
+          - generic [ref=e31]: Samples are processed in memory, never saved.
+    - generic [ref=e32]:
+      - complementary [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - paragraph [ref=e36]: SCAN SETUP
+            - heading "Choose a sample" [level=2] [ref=e37]
+          - generic [ref=e38]: 3 samples
+        - group [ref=e39]:
+          - generic [ref=e40] [cursor=pointer]:
+            - radio "Mixed identifiers One synthetic example for each detector 22_all_four.csv" [checked] [ref=e41]
+            - generic [ref=e42]:
+              - generic [ref=e43]: Mixed identifiers
+              - generic [ref=e44]: One synthetic example for each detector
+              - generic [ref=e45]: 22_all_four.csv
+          - generic [ref=e46] [cursor=pointer]:
+            - radio "Clean control A text sample with no sensitive patterns 01_clean_notes.txt" [ref=e47]
+            - generic [ref=e48]:
+              - generic [ref=e49]: Clean control
+              - generic [ref=e50]: A text sample with no sensitive patterns
+              - generic [ref=e51]: 01_clean_notes.txt
+          - generic [ref=e52] [cursor=pointer]:
+            - radio "Repeated matches Two valid test-card occurrences to verify counts 23_repeated_cards.txt" [ref=e53]
+            - generic [ref=e54]:
+              - generic [ref=e55]: Repeated matches
+              - generic [ref=e56]: Two valid test-card occurrences to verify counts
+              - generic [ref=e57]: 23_repeated_cards.txt
+        - paragraph [ref=e58]: Only preloaded training fixtures are available in this prototype.
+        - button "Run sample scan" [ref=e59] [cursor=pointer]
+      - region [ref=e63]:
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - paragraph [ref=e66]: SCAN RESULTS
+            - heading "Ready to scan" [level=2] [ref=e67]
+          - generic [ref=e68]: Not scanned
+        - generic [ref=e69]:
+          - heading "No scan results yet" [level=3] [ref=e74]
+          - paragraph [ref=e75]: Select a synthetic sample, then run a scan to see masked findings here.
+    - generic [ref=e76]:
+      - generic [ref=e77]: MiniDSP training prototype
+      - generic [ref=e78]: Local synthetic scan

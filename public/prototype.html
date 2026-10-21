@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="MiniDSP synthetic data discovery training prototype." />
+  <title>MiniDSP | Dashboard</title>
+  <link rel="stylesheet" href="https://lepide-design-system.vercel.app/v1/lepidus.css" />
+  <link rel="stylesheet" href="/prototype.css" />
+  <script src="https://lepide-design-system.vercel.app/v1/lepidus.js" defer></script>
+  <script src="/prototype.js" type="module"></script>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Main navigation">
+    <a class="sidebar-brand" href="/dashboard" aria-label="MiniDSP dashboard">
+      <span aria-hidden="true">///</span>
+    </a>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link" href="/dashboard" data-route="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="4" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/><rect x="14" y="14" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a class="sidebar-link" href="/upload" data-route="upload">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v5h14v-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Upload</span>
+      </a>
+      <a class="sidebar-link" href="/findings" data-route="findings">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Findings</span>
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="sidebar-reset" id="reset-demo" type="button" aria-label="Reset demo data">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 8A8 8 0 1 1 4 14m.5-6V3.5M4.5 8H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Reset demo</span>
+      </button>
+      <button class="sidebar-reset" id="sign-out" type="button" aria-label="Sign out">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 5H5v14h5m4-4 4-3-4-3m4 3H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Sign out</span>
+      </button>
+      <span class="sidebar-caption">LOCAL TRAINING</span>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <a class="wordmark" href="/dashboard">MiniDSP</a>
+      <div class="topbar-meta">
+        <span class="workspace-label">Synthetic workspace</span>
+        <span class="user-avatar" aria-hidden="true">QA</span>
+      </div>
+    </header>
+    <main class="page-shell" id="view" tabindex="-1"></main>
+    <footer class="app-footer">
+      <span>Training prototype</span>
+      <span>Scan history is held in memory and resets when the server stops.</span>
+    </footer>
+  </div>
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite"></div>
+</body>
+</html>

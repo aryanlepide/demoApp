@@ -1,0 +1,117 @@
+- generic [active] [ref=f12e1]:
+  - complementary "Main navigation" [ref=f12e2]:
+    - link "MiniDSP dashboard" [ref=f12e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=f12e4]: ///
+    - navigation [ref=f12e5]:
+      - link "Dashboard" [ref=f12e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=f12e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=f12e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=f12e21]:
+      - button "Reset demo data" [ref=f12e22] [cursor=pointer]:
+        - generic [ref=f12e25]: Reset demo
+      - generic [ref=f12e26]: LOCAL TRAINING
+  - generic [ref=f12e27]:
+    - banner [ref=f12e28]:
+      - link "MiniDSP" [ref=f12e29] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=f12e30]:
+        - generic [ref=f12e31]: Synthetic workspace
+        - generic [aria-hidden] [ref=f12e32]: QA
+    - main [ref=f12e33]:
+      - navigation "Breadcrumb" [ref=f12e34]:
+        - list [ref=f12e35]:
+          - listitem [ref=f12e36]:
+            - generic [ref=f12e37]: Lepide MiniDSP
+          - listitem [ref=f12e38]:
+            - generic [aria-hidden] [ref=f12e39]: /
+            - generic [ref=f12e40]: Dashboard
+      - generic [ref=f12e41]:
+        - paragraph [ref=f12e42]: OVERVIEW
+        - heading "Dashboard" [level=1] [ref=f12e43]
+        - paragraph [ref=f12e44]: Your scanned files and masked findings. Synthetic training data only.
+      - generic [ref=f12e45]:
+        - article [ref=f12e46]:
+          - heading "Files scanned" [level=2] [ref=f12e47]
+          - paragraph [ref=f12e48]: "3"
+        - article [ref=f12e49]:
+          - heading "Total findings" [level=2] [ref=f12e50]
+          - paragraph [ref=f12e51]: "2"
+        - article [ref=f12e52]:
+          - heading "High-risk files" [level=2] [ref=f12e53]
+          - paragraph [ref=f12e54]: "0"
+        - article [ref=f12e55]:
+          - heading "Critical-risk files" [level=2] [ref=f12e56]
+          - paragraph [ref=f12e57]: "0"
+      - generic [ref=f12e58]:
+        - region [ref=f12e59]:
+          - heading "Risk distribution" [level=2] [ref=f12e61]
+          - table [ref=f12e63]:
+            - caption [ref=f12e64]: Number and share of scanned files by highest risk
+            - rowgroup [ref=f12e65]:
+              - row [ref=f12e66]:
+                - columnheader "Risk level" [ref=f12e67]
+                - columnheader "Files" [ref=f12e70]
+                - columnheader "Share of files" [ref=f12e73]
+            - rowgroup [ref=f12e76]:
+              - row [ref=f12e77]:
+                - cell "Critical" [ref=f12e78]
+                - cell "0" [ref=f12e80]
+                - cell [ref=f12e81]:
+                  - generic "0% of scanned files" [ref=f12e82]: 0%
+              - row [ref=f12e87]:
+                - cell "High" [ref=f12e88]
+                - cell "0" [ref=f12e90]
+                - cell [ref=f12e91]:
+                  - generic "0% of scanned files" [ref=f12e92]: 0%
+              - row [ref=f12e97]:
+                - cell "Medium" [ref=f12e98]
+                - cell "0" [ref=f12e100]
+                - cell [ref=f12e101]:
+                  - generic "0% of scanned files" [ref=f12e102]: 0%
+              - row [ref=f12e107]:
+                - cell "Low" [ref=f12e108]
+                - cell "1" [ref=f12e110]
+                - cell [ref=f12e111]:
+                  - generic "33% of scanned files" [ref=f12e112]: 33%
+              - row [ref=f12e118]:
+                - cell "None" [ref=f12e119]
+                - cell "2" [ref=f12e121]
+                - cell [ref=f12e122]:
+                  - generic "67% of scanned files" [ref=f12e123]: 67%
+        - region [ref=f12e129]:
+          - generic [ref=f12e130]:
+            - heading "Recent scans" [level=2] [ref=f12e131]
+            - link "View findings" [ref=f12e132] [cursor=pointer]:
+              - /url: /findings
+          - table [ref=f12e134]:
+            - caption [ref=f12e135]: Recent synthetic file scans
+            - rowgroup [ref=f12e136]:
+              - row [ref=f12e137]:
+                - columnheader "File" [ref=f12e138]
+                - columnheader "Scanned" [ref=f12e141]
+                - columnheader "Risk" [ref=f12e144]
+                - columnheader "Findings" [ref=f12e147]
+            - rowgroup [ref=f12e150]:
+              - row [ref=f12e151]:
+                - cell "01_clean_notes.txt" [ref=f12e152]
+                - cell "21 Oct 2026, 13:28" [ref=f12e155]
+                - cell "None" [ref=f12e158]
+                - cell "0" [ref=f12e160]
+              - row [ref=f12e161]:
+                - cell "04_many_emails.csv" [ref=f12e162]
+                - cell "21 Oct 2026, 13:28" [ref=f12e165]
+                - cell "Low" [ref=f12e168]
+                - cell "2" [ref=f12e170]
+              - row [ref=f12e171]:
+                - cell "02_clean_inventory.csv" [ref=f12e172]
+                - cell "21 Oct 2026, 13:28" [ref=f12e175]
+                - cell "None" [ref=f12e178]
+                - cell "0" [ref=f12e180]
+    - contentinfo [ref=f12e181]:
+      - generic [ref=f12e182]: Training prototype
+      - generic [ref=f12e183]: Scan history is held in memory and resets when the server stops.
+  - status

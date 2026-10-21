@@ -1,0 +1,65 @@
+- generic [active] [ref=f1e1]:
+  - complementary "Main navigation" [ref=f1e2]:
+    - link "MiniDSP dashboard" [ref=f1e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=f1e4]: ///
+    - navigation [ref=f1e5]:
+      - link "Dashboard" [ref=f1e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=f1e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=f1e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=f1e21]:
+      - button "Reset demo data" [ref=f1e22] [cursor=pointer]:
+        - generic [ref=f1e25]: Reset demo
+      - generic [ref=f1e26]: LOCAL TRAINING
+  - generic [ref=f1e27]:
+    - banner [ref=f1e28]:
+      - link "MiniDSP" [ref=f1e29] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=f1e30]:
+        - generic [ref=f1e31]: Synthetic workspace
+        - generic [aria-hidden] [ref=f1e32]: QA
+    - main [ref=f1e33]:
+      - navigation "Breadcrumb" [ref=f1e34]:
+        - list [ref=f1e35]:
+          - listitem [ref=f1e36]:
+            - generic [ref=f1e37]: Lepide MiniDSP
+          - listitem [ref=f1e38]:
+            - generic [aria-hidden] [ref=f1e39]: /
+            - generic [ref=f1e40]: Upload and scan
+      - generic [ref=f1e41]:
+        - paragraph [ref=f1e42]: NEW SCAN
+        - heading "Upload and scan" [level=1] [ref=f1e43]
+        - paragraph [ref=f1e44]: Scan a synthetic CSV or TXT file. It is checked on the server and discarded; only masked, grouped findings are kept for this demo session.
+      - region [ref=f1e45]:
+        - heading "Choose a file" [level=2] [ref=f1e46]
+        - generic [ref=f1e47]:
+          - generic [ref=f1e48] [cursor=pointer]:
+            - generic [ref=f1e52]: Drop a synthetic file here or browse
+            - generic [ref=f1e53]: CSV or TXT · 1 byte to 1 MiB
+            - button "Drop a synthetic file here or browse CSV or TXT · 1 byte to 1 MiB" [ref=f1e54]
+          - generic [ref=f1e55]:
+            - paragraph [ref=f1e56]: Original file contents are never saved or logged.
+            - button "Upload and scan" [disabled] [ref=f1e57]
+      - region [ref=f1e58]:
+        - heading "Detection coverage" [level=2] [ref=f1e59]
+        - generic [ref=f1e60]:
+          - generic [ref=f1e61]:
+            - text: Email
+            - generic [ref=f1e62]: Low
+          - generic [ref=f1e63]:
+            - text: UK phone
+            - generic [ref=f1e64]: Medium
+          - generic [ref=f1e65]:
+            - text: UK NINO
+            - generic [ref=f1e66]: High
+          - generic [ref=f1e67]:
+            - text: Payment card
+            - generic [ref=f1e68]: Critical
+        - paragraph [ref=f1e69]: Cards must pass the Luhn check. NINOs are format-checked only and are not verified against an issuing authority.
+    - contentinfo [ref=f1e70]:
+      - generic [ref=f1e71]: Training prototype
+      - generic [ref=f1e72]: Scan history is held in memory and resets when the server stops.
+  - status

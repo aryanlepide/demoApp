@@ -1,0 +1,111 @@
+- generic [ref=f5e1]:
+  - banner [ref=f5e2]:
+    - link "MiniDSP home" [ref=f5e3] [cursor=pointer]:
+      - /url: /
+      - generic [aria-hidden] [ref=f5e4]: M
+      - generic [ref=f5e5]: MiniDSP
+    - generic [ref=f5e6]:
+      - generic [ref=f5e7]: TRAINING PROTOTYPE
+      - generic [ref=f5e9]: Local workspace
+      - generic [aria-hidden] [ref=f5e10]: QA
+  - main [ref=f5e11]:
+    - navigation "Breadcrumb" [ref=f5e12]:
+      - list [ref=f5e13]:
+        - listitem [ref=f5e14]:
+          - generic [ref=f5e15]: Data discovery
+        - listitem [ref=f5e16]:
+          - generic [aria-hidden] [ref=f5e17]: /
+          - generic [ref=f5e18]: Sensitive data scan
+    - region [ref=f5e19]:
+      - generic [ref=f5e20]:
+        - paragraph [ref=f5e21]: CLASSIFICATION WORKSPACE
+        - heading "Sensitive data scan" [level=1] [ref=f5e22]
+        - paragraph [ref=f5e23]: Run a synthetic sample to review detection, risk, and safe masking.
+      - note [ref=f5e24]:
+        - generic [ref=f5e29]:
+          - strong [ref=f5e30]: Synthetic data only
+          - generic [ref=f5e31]: Samples are processed in memory, never saved.
+    - generic [ref=f5e32]:
+      - complementary [ref=f5e33]:
+        - generic [ref=f5e34]:
+          - generic [ref=f5e35]:
+            - paragraph [ref=f5e36]: SCAN SETUP
+            - heading "Choose a sample" [level=2] [ref=f5e37]
+          - generic [ref=f5e38]: 3 samples
+        - radiogroup "Choose a sample" [ref=f5e39]:
+          - generic [ref=f5e40]: Synthetic sample
+          - generic [ref=f5e41]:
+            - generic [ref=f5e42] [cursor=pointer]:
+              - radio "Mixed identifiers One synthetic example for each detector 22_all_four.csv" [ref=f5e44]
+              - generic [ref=f5e47]:
+                - generic [ref=f5e48]: Mixed identifiers
+                - generic [ref=f5e49]: One synthetic example for each detector
+                - generic [ref=f5e50]: 22_all_four.csv
+            - generic [ref=f5e51] [cursor=pointer]:
+              - radio "Clean control A text sample with no sensitive patterns 01_clean_notes.txt" [ref=f5e53]
+              - generic [ref=f5e56]:
+                - generic [ref=f5e57]: Clean control
+                - generic [ref=f5e58]: A text sample with no sensitive patterns
+                - generic [ref=f5e59]: 01_clean_notes.txt
+            - generic [ref=f5e60] [cursor=pointer]:
+              - radio "Repeated matches Two valid test-card occurrences to verify counts 23_repeated_cards.txt" [checked] [active] [ref=f5e62]
+              - generic [ref=f5e65]:
+                - generic [ref=f5e66]: Repeated matches
+                - generic [ref=f5e67]: Two valid test-card occurrences to verify counts
+                - generic [ref=f5e68]: 23_repeated_cards.txt
+        - paragraph [ref=f5e69]: Only preloaded training fixtures are available in this prototype.
+        - button "Run sample scan" [ref=f5e70] [cursor=pointer]
+      - region [ref=f5e90]:
+        - generic [ref=f5e75]:
+          - generic [ref=f5e76]:
+            - paragraph [ref=f5e77]: SCAN RESULTS
+            - heading "Scan complete" [level=2] [ref=f5e91]
+          - generic [ref=f5e79]: Complete
+        - generic [ref=f5e92]:
+          - generic [ref=f5e93]:
+            - generic [ref=f5e184]:
+              - generic [ref=f5e185]: Highest classification
+              - strong [ref=f5e186]:
+                - generic [ref=f5e187]: None
+            - generic [ref=f5e188]:
+              - generic [ref=f5e189]: Pattern types
+              - strong [ref=f5e190]: "0"
+            - generic [ref=f5e191]:
+              - generic [ref=f5e192]: Occurrences
+              - strong [ref=f5e193]: "0"
+          - generic [ref=f5e104]:
+            - generic [ref=f5e105]:
+              - generic [ref=f5e106]: Scanned sample
+              - strong [ref=f5e107]: 01_clean_notes.txt
+            - generic [ref=f5e108]: Processed in memory
+          - tablist "Scan result sections" [ref=f5e110]:
+            - tab "Findings" [selected] [ref=f5e111] [cursor=pointer]
+            - tab "Pattern guide" [ref=f5e112] [cursor=pointer]
+          - tabpanel "Findings" [ref=f5e113]:
+            - generic [ref=f5e114]:
+              - generic [ref=f5e115]:
+                - heading "Detected patterns" [level=3] [ref=f5e116]
+                - paragraph [ref=f5e117]: 0 patterns
+              - generic [ref=f5e118]:
+                - generic [ref=f5e119]: Filter findings
+                - combobox "Filter findings" [ref=f5e120]:
+                  - option "All types" [selected]
+                  - option "Email"
+                  - option "UK phone"
+                  - option "UK NINO"
+                  - option "Payment card"
+            - table [ref=f5e122]:
+              - caption [ref=f5e123]: Sensitive data findings for the selected synthetic sample
+              - rowgroup [ref=f5e124]:
+                - row [ref=f5e125]:
+                  - columnheader "Pattern" [ref=f5e126]
+                  - columnheader "Risk" [ref=f5e129]
+                  - columnheader "Occurrences" [ref=f5e132]
+                  - columnheader "Masked example" [ref=f5e135]
+              - rowgroup [ref=f5e138]:
+                - row [ref=f5e194]:
+                  - cell "No sensitive patterns found in this sample." [ref=f5e195]
+            - paragraph [ref=f5e141]: Original values are not included in scan results.
+    - generic [ref=f5e87]:
+      - generic [ref=f5e88]: MiniDSP training prototype
+      - generic [ref=f5e89]: Local synthetic scan

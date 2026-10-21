@@ -1,0 +1,25 @@
+- generic [active] [ref=f1e1]:
+  - main [ref=f1e3]:
+    - region [ref=f1e4]:
+      - link "MiniDSP sign in" [ref=f1e5] [cursor=pointer]:
+        - /url: /login
+        - generic [aria-hidden] [ref=f1e6]: ///
+        - strong [ref=f1e7]: MiniDSP
+      - region [ref=f1e8]:
+        - paragraph [ref=f1e9]: SENSITIVE DATA DISCOVERY
+        - heading "Welcome back" [level=1] [ref=f1e10]
+        - paragraph [ref=f1e11]: Sign in to your local training workspace.
+        - generic [ref=f1e12]:
+          - generic [ref=f1e14]:
+            - generic [ref=f1e15]: Email
+            - textbox "Email" [ref=f1e17]
+          - generic [ref=f1e19]:
+            - generic [ref=f1e20]: Password
+            - textbox "Password" [ref=f1e22]
+          - button "Sign in" [ref=f1e23] [cursor=pointer]
+        - paragraph [ref=f1e24]:
+          - text: New to MiniDSP?
+          - link "Create an account" [ref=f1e25] [cursor=pointer]:
+            - /url: /signup
+        - paragraph [ref=f1e26]: Training prototype only. Accounts and scans are stored in memory and cleared when the server stops. This is not production authentication.
+  - status

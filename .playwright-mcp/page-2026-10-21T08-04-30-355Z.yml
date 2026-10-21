@@ -1,0 +1,76 @@
+- generic [active] [ref=e1]:
+  - complementary "Main navigation" [ref=e2]:
+    - link "MiniDSP dashboard" [ref=e3] [cursor=pointer]:
+      - /url: /dashboard
+      - generic [aria-hidden] [ref=e4]: ///
+    - navigation [ref=e5]:
+      - link "Dashboard" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Upload" [ref=e13] [cursor=pointer]:
+        - /url: /upload
+      - link "Findings" [ref=e17] [cursor=pointer]:
+        - /url: /findings
+    - generic [ref=e21]:
+      - button "Reset demo data" [ref=e22] [cursor=pointer]:
+        - generic [ref=e25]: Reset demo
+      - generic [ref=e26]: LOCAL TRAINING
+  - generic [ref=e27]:
+    - banner [ref=e28]:
+      - link "MiniDSP" [ref=e29] [cursor=pointer]:
+        - /url: /dashboard
+      - generic [ref=e30]:
+        - generic [ref=e31]: Synthetic workspace
+        - generic [aria-hidden] [ref=e32]: QA
+    - main [ref=e33]:
+      - navigation "Breadcrumb" [ref=e34]:
+        - list [ref=e35]:
+          - listitem [ref=e36]:
+            - generic [ref=e37]: Lepide MiniDSP
+          - listitem [ref=e38]:
+            - generic [aria-hidden] [ref=e39]: /
+            - generic [ref=e40]: Findings
+      - generic [ref=e41]:
+        - paragraph [ref=e42]: CLASSIFICATION RESULTS
+        - heading "Findings" [level=1] [ref=e43]
+        - paragraph [ref=e44]: Review grouped detections across this local demo session. Values are masked; original file contents are not retained.
+      - region [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - heading "Masked findings" [level=2] [ref=e48]
+            - paragraph [ref=e49]: 5 finding types
+          - generic [ref=e50]:
+            - generic [ref=e51]:
+              - generic [ref=e52]: Pattern
+              - combobox "Pattern" [ref=e53]:
+                - option "All patterns" [selected]
+                - option "Email"
+                - option "UK phone"
+                - option "UK NINO"
+                - option "Payment card"
+            - generic [ref=e54]:
+              - generic [ref=e55]: Risk
+              - combobox "Risk" [ref=e56]:
+                - option "All risks"
+                - option "Critical" [selected]
+                - option "High"
+                - option "Medium"
+                - option "Low"
+            - button "Export CSV" [ref=e57] [cursor=pointer]
+        - table [ref=e59]:
+          - caption [ref=e60]: Masked sensitive data findings by file
+          - rowgroup [ref=e61]:
+            - row [ref=e62]:
+              - columnheader "Pattern" [ref=e63]
+              - columnheader "Risk" [ref=e66]
+              - columnheader "File" [ref=e69]
+              - columnheader "Occurrences" [ref=e72]
+              - columnheader "Masked example" [ref=e75]
+              - columnheader "Scanned" [ref=e78]
+          - rowgroup [ref=e81]:
+            - row [ref=e156]:
+              - cell "Loading findings…" [ref=e157]
+        - paragraph [ref=e152]: Risk labels are textual and do not rely on color alone.
+    - contentinfo [ref=e153]:
+      - generic [ref=e154]: Training prototype
+      - generic [ref=e155]: Scan history is held in memory and resets when the server stops.
+  - status
