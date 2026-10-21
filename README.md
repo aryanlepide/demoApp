@@ -26,7 +26,7 @@
 
 ## Current local prototype
 
-This workspace began as the documentation-and-fixtures package described above. It now also includes a dependency-free local prototype for the Login, Create account, Dashboard, Upload, and Findings screens. The prototype uses Node.js 24, the supplied synthetic fixtures, and the Lepidus CSS/JavaScript distribution. Demo accounts use salted password hashes and HTTP-only sessions held in memory; there is no Supabase/production authentication, persistent database, deployment, or external service connection. Uploaded files are scanned in memory and only masked findings are kept in each user's running session.
+This workspace began as the documentation-and-fixtures package described above. It now also includes a local prototype for the Login, Create account, Dashboard, Upload, and Findings screens. The prototype uses Node.js 24, the supplied synthetic fixtures, and the Lepidus CSS/JavaScript distribution. When Supabase is configured, Auth sessions are held in HttpOnly cookies and masked scan aggregates are stored in the RLS-protected `scan_records` table. Without Supabase environment variables, the app falls back to salted in-memory demo accounts and volatile scan history. Uploaded file contents are scanned in memory and never stored.
 
 Run from PowerShell:
 
@@ -36,3 +36,11 @@ npm.cmd test
 ```
 
 Open `http://127.0.0.1:4173`. `npm.cmd run dev` serves the local prototype; `npm.cmd test` runs the detector, upload/API, and safe CSV export tests. The dashboard starts empty and updates after each successful scan. Scan history resets when the server stops or when **Reset demo** is selected.
+
+### Supabase setup
+
+1. Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in the ignored `.env.local` file. `.env.example` shows the variable names. Never use or commit a service-role key.
+2. Apply `supabase/migrations/20261021000000_scan_records.sql` to the Supabase project using its SQL editor or migration workflow. The table stores filename, timestamp, risk, and masked aggregate findings only; RLS policies bind every row to `auth.uid()`.
+3. Run `npm.cmd run dev` again. The server reads `.env.local` automatically. The login page identifies whether it is using Supabase or the local demo fallback.
+
+The configured project is reachable: the Auth settings endpoint and the `scan_records` REST schema both returned HTTP 200 during verification, and the running app reports `authMode: supabase`. Live signup and owner-scoped inserts remain **UNVERIFIED** because email confirmation is enabled and no test mailbox/account is available. The automated suite exercises the local fallback and ownership boundaries; it does not substitute for a confirmed Supabase user session and database write.

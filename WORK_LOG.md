@@ -1,7 +1,7 @@
 # Work log — Agent maintains this automatically
 
 ## Environment / baseline
-- Status: Screenshot-based local Login, Create account, Dashboard, Upload, Findings, detection API, and native Node test setup exist. Demo authentication and scan history are in memory only; no Supabase, production auth, persistent database, or deployment is configured.
+- Status: Screenshot-based local Login, Create account, Dashboard, Upload, Findings, detection API, and native Node test setup exist. Supabase URL/anon key are configured locally; Auth settings and `scan_records` schema endpoints return HTTP 200. Live signup/write remains unverified because email confirmation is enabled and no test mailbox/account is available.
 
 ## Progress (append a short entry per task)
 | Time (UTC) | Task | Changed files | Tests: command + actual result | Problems / fix | Git status |
@@ -23,22 +23,27 @@
 | 2026-10-21 10:01:10 UTC | Add in-memory Login/Create account flow and owner-scoped scans | src/server.ts, public/prototype.js, public/prototype.css, public/prototype.html, tests/server.test.ts, README.md, WORK_LOG.md, LEARNINGS.md | `npm.cmd test`: 16 passed, 0 failed, 0 skipped; exit code 0. Tests cover signup, login, logout, unauthenticated redirects, and account isolation | Passwords are scrypt-hashed in process memory; sessions are HttpOnly/SameSite cookies; no password is persisted | Git installed, but workspace has no `.git` repository or remote |
 | 2026-10-21 10:07:24 UTC | Verify browser account creation, sign out, and sign in | public/prototype.js, WORK_LOG.md | Browser: create account → Dashboard → sign out → Login → sign in → Dashboard; 0 console errors. `npm.cmd test`: 16 passed, 0 failed, 0 skipped; exit code 0 | Confirmed protected page navigation and session cookie flow in browser | No Git repository initialized |
 | 2026-10-21 09:39:38 UTC | Install Git for Windows | WORK_LOG.md | `winget list --id Git.Git --exact`: Git 2.55.0.5 installed; `C:\Program Files\Git\cmd\git.exe --version`: `git version 2.55.0.windows.5` | Git is installed and machine PATH updated; workspace still has no `.git` directory or configured remote | No repository status available; this folder is not yet a Git repository |
+| 2026-10-21 11:04:48 UTC | Add Supabase Auth and RLS-backed scan storage option | package.json, package-lock.json, src/supabase.ts, src/server.ts, supabase/migrations/20261021000000_scan_records.sql, .env.example, README.md, WORK_LOG.md, LEARNINGS.md | `npm.cmd test`: 16 passed, 0 failed, 0 skipped; exit code 0. Local fallback/account-isolation tests pass; live Supabase test NOT RUN because URL/key are absent and migration is unapplied | Installed `@supabase/supabase-js`; Supabase requests use anon key plus user access token (no service-role key); retained local fallback | No Git repository initialized |
+| 2026-10-21 11:24:43 UTC | Verify configured Supabase endpoints and scan schema | src/supabase.ts, src/server.ts, package.json, README.md, WORK_LOG.md | `npm.cmd test`: 16 passed, 0 failed, 0 skipped; exit code 0. Auth settings HTTP 200; scan_records schema probe HTTP 200; app `/api/auth/me` reports Supabase mode | Node needed `--use-system-ca` for the environment's trusted TLS chain. Signup/write remains NOT RUN: Supabase requires email confirmation and there is no test mailbox | `main` with `origin`; `.env.local` remains ignored |
+| 2026-10-21 11:13:43 UTC | Verify Supabase fallback, dependency, and secret ignore | WORK_LOG.md | `npm.cmd test`: 16 passed, 0 failed, 0 skipped; exit code 0. `npm.cmd list @supabase/supabase-js --depth=0`: 2.118.0. `git check-ignore .env.local`: ignored. Live Supabase NOT RUN | Auth, RLS-scoped persistence, and migration are implemented; live behavior awaits local project URL/key and applied migration | `main` with `origin`; `.env.local` is ignored |
 
 ## Decisions and known gaps
 - Implemented the brief's UK email, phone, NINO, and payment-card detectors only; Aadhaar is not included pending human decision.
 - Dashboard and Findings start empty; only a successfully scanned sample or uploaded file creates a history entry. Reset demo clears the in-memory session.
 - Dashboard risk table reports files by highest risk and occurrences by detector risk, with bars normalized over all occurrences; lower-risk findings in a Critical file remain visible.
 - Upload supports CSV/TXT as specified by the product brief. Excel `.xlsx` workbooks are rejected with a conversion instruction; adding XLSX parsing requires a separate scope/dependency decision.
-- Local Login, Create account, Dashboard, Upload, and Findings screens are implemented against the supplied reference. Demo auth and scan history are process-memory only; Supabase auth/RLS, persistent storage, production build, and deployment remain unimplemented/unverified.
+- Local Login, Create account, Dashboard, Upload, and Findings screens are implemented against the supplied reference. Supabase URL/anon key are configured and Auth/schema endpoints respond. Live signup/write and owner-isolation against Supabase remain unverified until a confirmed test account is available.
+- Supabase mode requires `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and the scan-records migration applied to the project. Never use a service-role key in this server.
 - `EXPECTED_RESULTS.json` is treated as intended outcomes; tests exercise supported synthetic text fixtures, not upload rejection behavior.
 - Figma companion: https://www.figma.com/design/Y5xkSr7nEJojJMe4oN9JDf?node-id=4-89 — editable Dashboard, Upload, and Findings artboards. The connected Figma plan permits only one variable mode, so the design file is Light-only; code themes remain token-driven.
-- Git for Windows 2.55.0.windows.5 is installed. This workspace is not initialized as a Git repository and has no remote; Vercel CLI is not installed.
+- Git for Windows 2.55.0.windows.5 is installed. The repository is on `main` with `origin` configured; Supabase project credentials/migration and Vercel CLI are still not configured.
 
 ## Security checks
 - Detector results contain masked examples only; automated test confirms the four raw synthetic matches in the mixed fixture are absent from serialized results. No file persistence, logging, or external forwarding was added.
 - Browser upload was verified with the synthetic mixed fixture; classification returned Critical with four occurrences. Invalid/empty/oversized/binary/invalid-UTF-8 upload cases are covered by API tests.
 - Upload contents are processed in memory and are not written, logged, exported, or forwarded. Volatile history retains filenames and masked findings only.
 - Account passwords are salted and hashed with Node `scrypt`; session IDs are HttpOnly/SameSite cookies. Account/session stores are volatile and are not a substitute for production Supabase Auth/RLS.
+- Supabase database calls use the user's access token and RLS policies; service-role credentials are not used. Auth settings and table schema endpoints were reachable; live user sign-in, RLS isolation, and insert/delete are NOT RUN because email confirmation is enabled and no test mailbox/account is available.
 
 **Rule:** Keep failures and retests. Do not claim PASS without executing a test.
 

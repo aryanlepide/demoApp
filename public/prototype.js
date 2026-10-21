@@ -176,7 +176,7 @@ function showError(message, target = view) {
   target.append(error);
 }
 
-function renderAuth(mode) {
+function renderAuth(mode, authMode = "local-demo") {
   document.body.classList.add("auth-route");
   const isSignup = mode === "signup";
   const title = isSignup ? "Create your account" : "Welcome back";
@@ -204,7 +204,9 @@ function renderAuth(mode) {
           <button class="lp-button lp-button--primary lp-button--md auth-submit" id="auth-submit" type="submit">${action}</button>
         </form>
         <p class="auth-switch">${isSignup ? "Already have an account?" : "New to MiniDSP?"} <a class="lp-link lp-link--standalone" href="${otherHref}">${otherLabel}</a></p>
-        <p class="auth-demo-note">Training prototype only. Accounts and scans are stored in memory and cleared when the server stops. This is not production authentication.</p>
+        <p class="auth-demo-note">${authMode === "supabase"
+          ? "Training prototype. Sign-in uses the configured Supabase project; never use production personal data here."
+          : "Local training mode. Accounts and scans stay in memory and clear when the server stops. This is not production authentication."}</p>
       </section>
     </section>`;
 
@@ -220,11 +222,19 @@ function renderAuth(mode) {
     submit.setAttribute("aria-busy", "true");
     submit.textContent = isSignup ? "Creating account…" : "Signing in…";
     try {
-      await getJson(isSignup ? "/api/auth/signup" : "/api/auth/login", {
+      const result = await getJson(isSignup ? "/api/auth/signup" : "/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
+      if (result.requiresEmailConfirmation) {
+        const notice = document.createElement("p");
+        notice.className = "auth-confirmation";
+        notice.setAttribute("role", "status");
+        notice.textContent = result.message;
+        message.replaceChildren(notice);
+        return;
+      }
       const requestedPath = new URLSearchParams(window.location.search).get("next");
       const nextPath = ["/dashboard", "/upload", "/findings"].includes(requestedPath) ? requestedPath : "/dashboard";
       window.location.replace(nextPath);
@@ -479,7 +489,7 @@ async function initializeApp() {
       window.location.replace("/dashboard");
       return;
     }
-    renderAuth(route.slice(1));
+    renderAuth(route.slice(1), session.authMode);
     return;
   }
 

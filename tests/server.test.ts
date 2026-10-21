@@ -55,7 +55,11 @@ test("serves public auth pages and protects dashboard APIs and pages", async () 
   assert.equal(dashboard.status, 302);
   assert.match(dashboard.headers.get("location") ?? "", /^\/login\?next=/);
   assert.equal((await fetch(`${origin}/api/dashboard`)).status, 401);
-  assert.deepEqual(await (await fetch(`${origin}/api/auth/me`)).json(), { authenticated: false, user: null });
+  assert.deepEqual(await (await fetch(`${origin}/api/auth/me`)).json(), {
+    authenticated: false,
+    user: null,
+    authMode: "local-demo",
+  });
 
   const authenticatedDashboard = await (await apiFetch("/api/dashboard")).json();
   assert.equal(authenticatedDashboard.metrics.filesScanned, 0);
@@ -97,7 +101,11 @@ test("logs in, rejects invalid credentials, logs out, and isolates accounts", as
 
   const logout = await apiFetch("/api/auth/logout", { method: "POST" }, loginCookie);
   assert.equal(logout.status, 200);
-  assert.deepEqual(await (await apiFetch("/api/auth/me", {}, loginCookie)).json(), { authenticated: false, user: null });
+  assert.deepEqual(await (await apiFetch("/api/auth/me", {}, loginCookie)).json(), {
+    authenticated: false,
+    user: null,
+    authMode: "local-demo",
+  });
 });
 
 test("scans a known synthetic sample and aligns Dashboard, risk, and Findings totals", async () => {

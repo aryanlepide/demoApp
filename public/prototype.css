@@ -625,10 +625,19 @@ body.auth-route .page-shell {
 
 .auth-hint,
 .auth-demo-note,
-.auth-switch {
+.auth-switch,
+.auth-confirmation {
   color: var(--color-text-secondary);
   font-size: var(--typography-body-sm-fontSize);
   line-height: var(--typography-body-lg-lineHeight);
+}
+
+.auth-confirmation {
+  margin: var(--space-5) 0 0;
+  padding: var(--space-5) var(--space-6);
+  border-inline-start: 2px solid var(--color-status-success-text);
+  background: var(--color-status-success-bg);
+  color: var(--color-status-success-text);
 }
 
 .auth-hint { margin: var(--space-3) 0 0; }

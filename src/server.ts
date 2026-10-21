@@ -4,6 +4,7 @@ import { basename, extname, resolve } from "node:path";
 import { randomBytes, randomUUID, scryptSync, timingSafeEqual } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import { analyzeText } from "./detector.ts";
+import { createSupabaseClient, supabaseConfigured } from "./supabase.ts";
 import type { Finding, RiskLevel, ScanResult } from "./detector.ts";
 
 const root = resolve(import.meta.dirname, "..");
@@ -13,6 +14,8 @@ const maxFileBytes = 1_048_576;
 const maxRequestBytes = maxFileBytes + 16_384;
 const sessionCookieName = "minidsp_session";
 const sessionLifetimeMs = 8 * 60 * 60 * 1000;
+const supabaseAccessCookieName = "minidsp_supabase_access";
+const supabaseRefreshCookieName = "minidsp_supabase_refresh";
 
 const samples = {
   mixed: {
@@ -61,8 +64,11 @@ interface Account {
   id: string;
   name: string;
   email: string;
-  passwordSalt: Buffer;
-  passwordHash: Buffer;
+  backend: "local-demo" | "supabase";
+  passwordSalt?: Buffer;
+  passwordHash?: Buffer;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 interface Session {
@@ -111,18 +117,123 @@ function recordSummary(record: ScanRecord) {
   };
 }
 
-function authenticatedUser(request: IncomingMessage): Account | undefined {
+async function recordsFor(account: Account): Promise<ScanRecord[]> {
+  if (account.backend !== "supabase") return scanHistory.get(account.id) ?? [];
+
+  const { data, error } = await createSupabaseClient(account.accessToken).from("scan_records")
+    .select("id,file_name,scanned_at,risk,findings")
+    .order("scanned_at", { ascending: false })
+    .limit(100);
+  if (error) throw new Error("Could not load this account's scan history from Supabase.");
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    fileName: row.file_name,
+    scannedAt: row.scanned_at,
+    risk: row.risk as RiskLevel,
+    findings: row.findings as Finding[],
+  }));
+}
+
+async function saveRecord(account: Account, record: ScanRecord): Promise<void> {
+  if (account.backend !== "supabase") {
+    addRecord(account.id, record);
+    return;
+  }
+
+  const { error } = await createSupabaseClient(account.accessToken).from("scan_records").insert({
+    id: record.id,
+    user_id: account.id,
+    file_name: record.fileName,
+    scanned_at: record.scannedAt,
+    risk: record.risk,
+    finding_count: record.findings.reduce((total, finding) => total + finding.count, 0),
+    findings: record.findings,
+  });
+  if (error) throw new Error("Could not save masked scan results to this account.");
+}
+
+async function clearRecords(account: Account): Promise<void> {
+  if (account.backend !== "supabase") {
+    scanHistory.delete(account.id);
+    return;
+  }
+
+  const { error } = await createSupabaseClient(account.accessToken).from("scan_records")
+    .delete()
+    .eq("user_id", account.id);
+  if (error) throw new Error("Could not clear this account's scan history.");
+}
+
+function requestCookie(request: IncomingMessage, name: string): string | undefined {
   const cookie = request.headers.cookie?.split(";")
     .map((part) => part.trim())
-    .find((part) => part.startsWith(`${sessionCookieName}=`));
+    .find((part) => part.startsWith(`${name}=`));
   if (!cookie) return undefined;
-
-  let sessionId: string;
   try {
-    sessionId = decodeURIComponent(cookie.slice(sessionCookieName.length + 1));
+    return decodeURIComponent(cookie.slice(name.length + 1));
   } catch {
     return undefined;
   }
+}
+
+function cookieHeader(name: string, value: string, maxAge: number): string {
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${name}=${encodeURIComponent(value)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${maxAge}${secure}`;
+}
+
+function setSupabaseSessionCookies(response: ServerResponse, session: { access_token: string; refresh_token: string; expires_in: number }): void {
+  response.setHeader("Set-Cookie", [
+    cookieHeader(supabaseAccessCookieName, session.access_token, session.expires_in),
+    cookieHeader(supabaseRefreshCookieName, session.refresh_token, 60 * 24 * 60 * 60),
+  ]);
+}
+
+function clearSupabaseSessionCookies(response: ServerResponse): void {
+  const clear = (name: string) => cookieHeader(name, "", 0);
+  response.setHeader("Set-Cookie", [clear(supabaseAccessCookieName), clear(supabaseRefreshCookieName)]);
+}
+
+async function authenticatedUser(request: IncomingMessage, response: ServerResponse): Promise<Account | undefined> {
+  if (supabaseConfigured) {
+    const accessToken = requestCookie(request, supabaseAccessCookieName);
+    const refreshToken = requestCookie(request, supabaseRefreshCookieName);
+    if (!accessToken && !refreshToken) return undefined;
+
+    const client = createSupabaseClient();
+    if (accessToken) {
+      const { data, error } = await client.auth.getUser(accessToken);
+      if (!error && data.user) {
+        return {
+          id: data.user.id,
+          email: data.user.email ?? "",
+          name: String(data.user.user_metadata?.name ?? data.user.email ?? "MiniDSP user"),
+          backend: "supabase",
+          accessToken,
+          refreshToken,
+        };
+      }
+    }
+
+    if (refreshToken) {
+      const { data, error } = await client.auth.refreshSession({ refresh_token: refreshToken });
+      if (!error && data.session && data.user) {
+        setSupabaseSessionCookies(response, data.session);
+        return {
+          id: data.user.id,
+          email: data.user.email ?? "",
+          name: String(data.user.user_metadata?.name ?? data.user.email ?? "MiniDSP user"),
+          backend: "supabase",
+          accessToken: data.session.access_token,
+          refreshToken: data.session.refresh_token,
+        };
+      }
+    }
+    clearSupabaseSessionCookies(response);
+    return undefined;
+  }
+
+  const sessionId = requestCookie(request, sessionCookieName);
+  if (!sessionId) return undefined;
   const session = sessions.get(sessionId);
   if (!session) return undefined;
   if (session.expiresAt <= Date.now()) {
@@ -234,8 +345,8 @@ async function parseUpload(request: IncomingMessage): Promise<{ fileName: string
   return { fileName, text };
 }
 
-function dashboardData(userId: string) {
-  const records = scanHistory.get(userId) ?? [];
+async function dashboardData(account: Account) {
+  const records = await recordsFor(account);
   const fileCount = records.length;
   const findingCount = records.reduce(
     (total, record) => total + record.findings.reduce((count, finding) => count + finding.count, 0),
@@ -261,10 +372,11 @@ function dashboardData(userId: string) {
   };
 }
 
-function findingRows(userId: string, searchParams: URLSearchParams) {
+async function findingRows(account: Account, searchParams: URLSearchParams) {
   const selectedType = searchParams.get("type");
   const selectedRisk = searchParams.get("risk");
-  return (scanHistory.get(userId) ?? []).flatMap((record) => record.findings
+  const records = await recordsFor(account);
+  return records.flatMap((record) => record.findings
     .filter((finding) => (!selectedType || selectedType === "all" || finding.type === selectedType)
       && (!selectedRisk || selectedRisk === "all" || finding.risk === selectedRisk))
     .map((finding) => ({ ...finding, scanId: record.id, fileName: record.fileName, scannedAt: record.scannedAt })));
@@ -272,16 +384,35 @@ function findingRows(userId: string, searchParams: URLSearchParams) {
 
 async function handleAuthRequest(request: IncomingMessage, response: ServerResponse, pathname: string): Promise<boolean> {
   if (request.method === "GET" && pathname === "/api/auth/me") {
-    const account = authenticatedUser(request);
-    sendJson(response, 200, { authenticated: Boolean(account), user: account ? publicAccount(account) : null });
+    const account = await authenticatedUser(request, response);
+    sendJson(response, 200, {
+      authenticated: Boolean(account),
+      user: account ? publicAccount(account) : null,
+      authMode: supabaseConfigured ? "supabase" : "local-demo",
+    });
     return true;
   }
 
   if (request.method === "POST" && pathname === "/api/auth/logout") {
-    const cookie = request.headers.cookie?.split(";")
-      .map((part) => part.trim())
-      .find((part) => part.startsWith(`${sessionCookieName}=`));
-    if (cookie) sessions.delete(decodeURIComponent(cookie.slice(sessionCookieName.length + 1)));
+    if (supabaseConfigured) {
+      const accessToken = requestCookie(request, supabaseAccessCookieName);
+      const refreshToken = requestCookie(request, supabaseRefreshCookieName);
+      if (accessToken && refreshToken) {
+        try {
+          const client = createSupabaseClient();
+          const { data } = await client.auth.setSession({ access_token: accessToken, refresh_token: refreshToken });
+          if (data.session) await client.auth.signOut({ scope: "local" });
+        } catch {
+          // Clear local cookies even if the remote session has already expired.
+        }
+      }
+      clearSupabaseSessionCookies(response);
+      sendJson(response, 200, { authenticated: false });
+      return true;
+    }
+
+    const sessionId = requestCookie(request, sessionCookieName);
+    if (sessionId) sessions.delete(sessionId);
     setSessionCookie(response);
     sendJson(response, 200, { authenticated: false });
     return true;
@@ -307,13 +438,48 @@ async function handleAuthRequest(request: IncomingMessage, response: ServerRespo
       sendJson(response, 400, { error: "Enter a name, valid email, and password between 8 and 128 characters." });
       return true;
     }
+
+    if (supabaseConfigured) {
+      try {
+        const { data, error } = await createSupabaseClient().auth.signUp({
+          email,
+          password,
+          options: { data: { name } },
+        });
+        if (error) {
+          sendJson(response, error.status === 429 ? 429 : 400, { error: error.message });
+          return true;
+        }
+        if (data.session && data.user) {
+          setSupabaseSessionCookies(response, data.session);
+          sendJson(response, 201, {
+            authenticated: true,
+            authMode: "supabase",
+            user: { id: data.user.id, name, email: data.user.email ?? email },
+          });
+          return true;
+        }
+        sendJson(response, 202, {
+          authenticated: false,
+          requiresEmailConfirmation: true,
+          message: "Check your email to confirm your account, then sign in.",
+        });
+      } catch {
+        sendJson(response, 503, { error: "Supabase Auth is unavailable. Check the local Supabase configuration." });
+      }
+      return true;
+    }
+
     if (accountsByEmail.has(email)) {
       sendJson(response, 409, { error: "An account with that email already exists." });
       return true;
     }
 
     const salt = randomBytes(16);
-    const account: Account = { id: randomUUID(), name, email, passwordSalt: salt, passwordHash: scryptSync(password, salt, 64) };
+    const account: Account = {
+      id: randomUUID(), name, email, backend: "local-demo", passwordSalt: salt,
+      passwordHash: scryptSync(password, salt, 64),
+    };
     accountsByEmail.set(email, account);
     accountsById.set(account.id, account);
     startSession(response, account);
@@ -321,10 +487,33 @@ async function handleAuthRequest(request: IncomingMessage, response: ServerRespo
     return true;
   }
 
+  if (supabaseConfigured) {
+    try {
+      const { data, error } = await createSupabaseClient().auth.signInWithPassword({ email, password });
+      if (error || !data.session || !data.user) {
+        sendJson(response, 401, { error: error?.message ?? "Email or password is incorrect." });
+        return true;
+      }
+      setSupabaseSessionCookies(response, data.session);
+      sendJson(response, 200, {
+        authenticated: true,
+        authMode: "supabase",
+        user: {
+          id: data.user.id,
+          email: data.user.email ?? email,
+          name: String(data.user.user_metadata?.name ?? data.user.email ?? email),
+        },
+      });
+    } catch {
+      sendJson(response, 503, { error: "Supabase Auth is unavailable. Check the local Supabase configuration." });
+    }
+    return true;
+  }
+
   const account = accountsByEmail.get(email);
   const salt = account?.passwordSalt ?? Buffer.alloc(16);
   const suppliedHash = scryptSync(password, salt, 64);
-  if (!account || password.length < 8 || password.length > 128 || !timingSafeEqual(suppliedHash, account.passwordHash)) {
+  if (!account?.passwordHash || !account.passwordSalt || password.length < 8 || password.length > 128 || !timingSafeEqual(suppliedHash, account.passwordHash)) {
     sendJson(response, 401, { error: "Email or password is incorrect." });
     return true;
   }
@@ -339,7 +528,7 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
 
   if (pathname.startsWith("/api/auth/") && await handleAuthRequest(request, response, pathname)) return;
 
-  const account = authenticatedUser(request);
+  const account = await authenticatedUser(request, response);
   if (pathname === "/") {
     response.statusCode = 302;
     response.setHeader("Location", account ? "/dashboard" : "/login");
@@ -373,11 +562,11 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
     return;
   }
   if (request.method === "GET" && pathname === "/api/dashboard") {
-    sendJson(response, 200, dashboardData(account!.id));
+    sendJson(response, 200, await dashboardData(account!));
     return;
   }
   if (request.method === "GET" && pathname === "/api/findings") {
-    sendJson(response, 200, { findings: findingRows(account!.id, url.searchParams) });
+    sendJson(response, 200, { findings: await findingRows(account!, url.searchParams) });
     return;
   }
   if (request.method === "POST" && pathname === "/api/upload") {
@@ -385,7 +574,7 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
       const upload = await parseUpload(request);
       const result = analyzeText(upload.text);
       const record = createRecord(upload.fileName, result);
-      addRecord(account!.id, record);
+      await saveRecord(account!, record);
       sendJson(response, 201, { ...recordSummary(record), findings: record.findings });
     } catch (error) {
       const tooLarge = error instanceof RangeError;
@@ -395,8 +584,8 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
     return;
   }
   if (request.method === "POST" && pathname === "/api/session/reset") {
-    scanHistory.delete(account!.id);
-    sendJson(response, 200, dashboardData(account!.id));
+    await clearRecords(account!);
+    sendJson(response, 200, await dashboardData(account!));
     return;
   }
   if (request.method === "POST" && pathname === "/api/scan") {
@@ -421,7 +610,7 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
       const content = await readFile(resolve(fixtureRoot, selected.fileName), "utf8");
       const result = analyzeText(content);
       const record = createRecord(selected.fileName, result);
-      addRecord(account!.id, record);
+      await saveRecord(account!, record);
       sendJson(response, 200, { fileName: selected.fileName, label: selected.label, purpose: selected.description, ...recordSummary(record), findings: result.findings });
     } catch {
       sendJson(response, 500, { error: "The sample could not be scanned." });
