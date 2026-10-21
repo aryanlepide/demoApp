@@ -7,7 +7,7 @@ import { analyzeText } from "./detector.ts";
 import { createSupabaseClient, supabaseConfigured } from "./supabase.ts";
 import type { Finding, RiskLevel, ScanResult } from "./detector.ts";
 
-const root = resolve(import.meta.dirname, "..");
+const root = process.env.VERCEL ? process.cwd() : resolve(import.meta.dirname, "..");
 const fixtureRoot = resolve(root, "tests/fixtures/additional");
 const publicRoot = resolve(root, "public");
 const maxFileBytes = 1_048_576;
@@ -16,6 +16,11 @@ const sessionCookieName = "minidsp_session";
 const sessionLifetimeMs = 8 * 60 * 60 * 1000;
 const supabaseAccessCookieName = "minidsp_supabase_access";
 const supabaseRefreshCookieName = "minidsp_supabase_refresh";
+
+function configuredAuthMode(): "supabase" | "local-demo" | "unconfigured" {
+  if (supabaseConfigured) return "supabase";
+  return process.env.VERCEL ? "unconfigured" : "local-demo";
+}
 
 const samples = {
   mixed: {
@@ -388,7 +393,7 @@ async function handleAuthRequest(request: IncomingMessage, response: ServerRespo
     sendJson(response, 200, {
       authenticated: Boolean(account),
       user: account ? publicAccount(account) : null,
-      authMode: supabaseConfigured ? "supabase" : "local-demo",
+      authMode: configuredAuthMode(),
     });
     return true;
   }
@@ -431,6 +436,11 @@ async function handleAuthRequest(request: IncomingMessage, response: ServerRespo
   const data = typeof body === "object" && body !== null ? body as Record<string, unknown> : {};
   const email = typeof data.email === "string" ? data.email.trim().toLowerCase() : "";
   const password = typeof data.password === "string" ? data.password : "";
+
+  if (process.env.VERCEL && !supabaseConfigured) {
+    sendJson(response, 503, { error: "Hosted authentication is unavailable until Supabase is configured." });
+    return true;
+  }
 
   if (pathname === "/api/auth/signup") {
     const name = typeof data.name === "string" ? data.name.trim() : "";
@@ -522,11 +532,16 @@ async function handleAuthRequest(request: IncomingMessage, response: ServerRespo
   return true;
 }
 
-async function handleRequest(request: IncomingMessage, response: ServerResponse): Promise<void> {
+export async function handleRequest(request: IncomingMessage, response: ServerResponse): Promise<void> {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const pathname = url.pathname;
 
   if (pathname.startsWith("/api/auth/") && await handleAuthRequest(request, response, pathname)) return;
+
+  if (process.env.VERCEL && !supabaseConfigured && pathname.startsWith("/api/")) {
+    sendJson(response, 503, { error: "Supabase is not configured for this deployment." });
+    return;
+  }
 
   const account = await authenticatedUser(request, response);
   if (pathname === "/") {

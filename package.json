@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "node --use-system-ca --env-file-if-exists=.env.local --experimental-strip-types src/server.ts",
-    "test": "node --experimental-strip-types --test tests/detector.test.ts tests/server.test.ts tests/csv.test.ts"
+    "test": "node --experimental-strip-types --test tests/detector.test.ts tests/server.test.ts tests/csv.test.ts tests/vercel.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0"

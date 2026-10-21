@@ -44,3 +44,7 @@ Open `http://127.0.0.1:4173`. `npm.cmd run dev` serves the local prototype; `npm
 3. Run `npm.cmd run dev` again. The server reads `.env.local` automatically. The login page identifies whether it is using Supabase or the local demo fallback.
 
 The configured project is reachable: the Auth settings endpoint and the `scan_records` REST schema both returned HTTP 200 during verification, and the running app reports `authMode: supabase`. Live signup and owner-scoped inserts remain **UNVERIFIED** because email confirmation is enabled and no test mailbox/account is available. The automated suite exercises the local fallback and ownership boundaries; it does not substitute for a confirmed Supabase user session and database write.
+
+### Vercel deployment
+
+Vercel uses `api/[...path].ts` as the Node function entrypoint and `vercel.json` rewrites `/`, `/login`, `/signup`, `/dashboard`, `/upload`, and `/findings` to the static app shell. The function disables automatic body parsing so multipart uploads reach the server validator intact, and bundles the synthetic fixture directory for the sample-scan endpoint. Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in Vercel project environment settings before deployment; hosted mode refuses local in-memory auth when those variables are missing. Deployment itself is not verified until a Vercel build and live smoke test complete.

@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "api/[...path].ts": {
+      "includeFiles": "tests/fixtures/additional/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/", "destination": "/login" },
+    { "source": "/login", "destination": "/prototype.html" },
+    { "source": "/signup", "destination": "/prototype.html" },
+    { "source": "/dashboard", "destination": "/prototype.html" },
+    { "source": "/upload", "destination": "/prototype.html" },
+    { "source": "/findings", "destination": "/prototype.html" }
+  ]
+}

@@ -205,8 +205,10 @@ function renderAuth(mode, authMode = "local-demo") {
         </form>
         <p class="auth-switch">${isSignup ? "Already have an account?" : "New to MiniDSP?"} <a class="lp-link lp-link--standalone" href="${otherHref}">${otherLabel}</a></p>
         <p class="auth-demo-note">${authMode === "supabase"
-          ? "Training prototype. Sign-in uses the configured Supabase project; never use production personal data here."
-          : "Local training mode. Accounts and scans stay in memory and clear when the server stops. This is not production authentication."}</p>
+          ? "Training prototype. Sign-in uses the configured Supabase project; use synthetic training data only."
+          : authMode === "unconfigured"
+            ? "Hosted authentication is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in Vercel project settings."
+            : "Local training mode. Accounts and scans stay in memory and clear when the server stops. This is not production authentication."}</p>
       </section>
     </section>`;
 
